@@ -1,0 +1,310 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">I</div>
+      <div>
+        <h2>Inventario MiniMarket</h2>
+        <span>Gestión de inventario</span>
+      </div>
+    </div>
+
+    <div class="menu-label">MENÚ PRINCIPAL</div>
+
+    <nav class="navigation">
+      <a class="nav-item active" routerLink="/dashboard">
+        <span class="nav-icon">▦</span>
+        Panel principal
+      </a>
+      <a class="nav-item" routerLink="/dashboard" fragment="productos">
+        <span class="nav-icon">□</span>
+        Productos
+      </a>
+
+      <a class="nav-item" routerLink="/dashboard" fragment="inventario">
+        <span class="nav-icon">▤</span>
+        Inventario
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="help-card">
+        <div class="help-icon">?</div>
+        <strong>¿Necesitas ayuda?</strong>
+        <p>Administra tus productos de forma sencilla.</p>
+      </div>
+
+      <div class="user-profile">
+        <div class="avatar">AD</div>
+        <div class="user-info">
+          <strong>Administrador</strong>
+          <span>Gestión de tienda</span>
+        </div>
+        <span class="profile-menu">•••</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <div class="breadcrumb">Inicio / Panel principal</div>
+        <h1>Panel principal</h1>
+        <p class="subtitle">Resumen general de tu inventario.</p>
+      </div>
+
+      <div class="topbar-actions">
+        <span class="status-dot"></span>
+        <span class="status-text">Panel de demostración</span>
+        <div class="avatar">AD</div>
+      </div>
+    </header>
+
+    <section class="welcome-banner">
+      <div>
+        <span class="welcome-tag">RESUMEN DE TU NEGOCIO</span>
+        <h2>¡Bienvenido a Mini Market Vallejo!</h2>
+        <p>Organiza tus productos y mantén tu inventario bajo control.</p>
+      </div>
+
+      <div class="banner-art">
+        <div class="art-box box-one">□</div>
+        <div class="art-box box-two">▤</div>
+        <div class="art-box box-three">+</div>
+      </div>
+    </section>
+
+    <section class="stats-grid" id="inventario">
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Productos registrados</span>
+          <span class="stat-icon blue">▦</span>
+        </div>
+        <div class="stat-number">{{ productos.length }}</div>
+        <div class="stat-foot">Productos en esta vista</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Unidades registradas</span>
+          <span class="stat-icon purple">▤</span>
+        </div>
+        <div class="stat-number">{{ totalUnidades }}</div>
+        <div class="stat-foot">Suma de las cantidades</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Valor referencial</span>
+          <span class="stat-icon green">S/</span>
+        </div>
+        <div class="stat-number">
+          {{ valorInventario | currency:'PEN':'S/ ':'1.2-2' }}
+        </div>
+        <div class="stat-foot">Precio × cantidad</div>
+      </article>
+    </section>
+
+    <section class="products-section" id="productos">
+      <div class="section-heading">
+        <div>
+          <h2>Lista de productos</h2>
+          <p>Consulta y administra los productos de tu tienda.</p>
+        </div>
+
+        <button class="primary-button" (click)="abrirFormulario()">
+          <span>+</span> Nuevo producto
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span>⌕</span>
+          <input
+            type="text"
+            placeholder="Buscar por nombre..."
+            [value]="busqueda"
+            (input)="actualizarBusqueda($event)"
+          />
+        </div>
+        <span class="result-count">
+          {{ productosFiltrados.length }} productos
+        </span>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>PRODUCTO</th>
+            <th>PRECIO</th>
+            <th>CANTIDAD</th>
+            <th>ESTADO</th>
+            <th>ACCIONES</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          @for (producto of productosFiltrados; track producto.id) {
+          <tr>
+            <td>
+              <div class="product-cell">
+                <div
+                  class="product-icon"
+                  [ngClass]="obtenerClaseCategoria(producto.categoria)"
+                >
+                  {{ producto.nombre.charAt(0).toUpperCase() }}
+                </div>
+                <div>
+                  <strong>{{ producto.nombre }}</strong>
+                  <span>ID-{{ producto.id }}</span>
+                </div>
+              </div>
+            </td>
+
+            <td class="price">
+              {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
+            </td>
+
+            <td>{{ producto.cantidad }} unidades</td>
+
+            <td>
+                  <span
+                    class="stock-badge"
+                    [class.stock-low]="producto.cantidad < 10"
+                  >
+                    {{ producto.cantidad < 10 ? 'Stock bajo' : 'Disponible' }}
+                  </span>
+            </td>
+
+            <td>
+              <div class="row-actions">
+                <button
+                  class="icon-button"
+                  title="Editar producto"
+                  (click)="editarProducto(producto)"
+                >✎</button>
+
+                <button
+                  class="icon-button delete-button"
+                  title="Eliminar producto"
+                  (click)="eliminarProducto(producto.id)"
+                >×</button>
+              </div>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="5" class="empty-state">
+              No se encontraron productos.
+            </td>
+          </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <span>Mostrando {{ productosFiltrados.length }} productos registrados</span>
+        <span class="demo-label">Inventario actualizado</span>
+      </div>
+    </section>
+
+    @if (mostrarFormulario) {
+    <div class="modal-backdrop" (click)="cerrarFormulario()">
+      <section
+        class="product-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="form-title"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="modal-heading">
+          <div>
+            <h2 id="form-title">
+              {{ productoEditandoId === null ? 'Nuevo producto' : 'Editar producto' }}
+            </h2>
+            <p>Completa la información del producto.</p>
+          </div>
+          <button
+            class="icon-button"
+            type="button"
+            (click)="cerrarFormulario()"
+          >×</button>
+        </div>
+
+        <form (submit)="guardarProducto($event)">
+          <label for="nombre">Nombre del producto</label>
+          <input
+            id="nombre"
+            name="nombre"
+            required
+            maxlength="100"
+            placeholder="Ej. Arroz costeño"
+            [value]="formulario.nombre"
+            (input)="actualizarCampo('nombre', $event)"
+          />
+
+          <label for="categoria">Categoría</label>
+          <select
+            id="categoria"
+            name="categoria"
+            [value]="formulario.categoria"
+            (change)="actualizarCategoria($event)"
+            required
+          >
+            <option value="Alimentos">Alimentos</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Limpieza">Limpieza</option>
+            <option value="Otros">Otros</option>
+          </select>
+
+          <div class="form-row">
+            <div>
+              <label for="precio">Precio (S/)</label>
+              <input
+                id="precio"
+                name="precio"
+                type="number"
+                min="0.01"
+                step="0.01"
+                required
+                [value]="formulario.precio"
+                (input)="actualizarCampo('precio', $event)"
+              />
+            </div>
+
+            <div>
+              <label for="cantidad">Cantidad</label>
+              <input
+                id="cantidad"
+                name="cantidad"
+                type="number"
+                min="0"
+                step="1"
+                required
+                [value]="formulario.cantidad"
+                (input)="actualizarCampo('cantidad', $event)"
+              />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="secondary-button"
+              (click)="cerrarFormulario()"
+            >
+              Cancelar
+            </button>
+
+            <button type="submit" class="primary-button">
+              Guardar producto
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+    }
+  </main>
+</div>
+
