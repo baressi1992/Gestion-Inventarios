@@ -70,4 +70,34 @@ public class ProductoController {
         productoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @PostMapping("/{id}/descontar")
+    public ResponseEntity<?> descontarStock(
+            @PathVariable Long id,
+            @RequestParam Integer cantidad) {
+
+        if (cantidad == null || cantidad <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La cantidad debe ser mayor que cero");
+        }
+
+        return productoRepository.findById(id)
+                .map(producto -> {
+                    if (producto.getCantidad() < cantidad) {
+                        return ResponseEntity.badRequest()
+                                .body("Stock insuficiente. Disponible: "
+                                        + producto.getCantidad());
+                    }
+
+                    producto.setCantidad(
+                            producto.getCantidad() - cantidad
+                    );
+
+                    Producto actualizado = productoRepository.save(producto);
+                    return ResponseEntity.ok(actualizado);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
