@@ -1,0 +1,85 @@
+
+<div class="app-layout">
+
+  <div
+    class="sidebar-overlay"
+    [class.visible]="menuAbierto"
+    (click)="alternarMenu()">
+  </div>
+
+  <aside class="sidebar" [class.sidebar-open]="menuAbierto">
+
+    <div class="brand">
+      <div class="brand-icon">I</div>
+      <div class="brand-text">
+        <h2>Inventario</h2>
+        <span>Gestión de productos</span>
+      </div>
+    </div>
+
+    <div class="menu-label">MENÚ PRINCIPAL</div>
+
+    <nav class="navigation">
+        <a
+            routerLink="/dashboard"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="menuAbierto = false">
+            <span class="nav-icon">▦</span>
+            <span>Dashboard</span>
+        </a>
+        <a
+            routerLink="/productos"
+            routerLinkActive="active"
+            (click)="alternarMenu()">
+            <span class="nav-icon">□</span>
+            Productos
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-indicator"></div>
+      <span>Sistema de inventario</span>
+    </div>
+
+  </aside>
+
+  <div class="main-area">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Abrir menú"
+          (click)="alternarMenu()">
+          ☰
+        </button>
+
+        <div>
+          <span class="current-section">Minimarket Pro</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="user-avatar">U</div>
+        <div class="user-info">
+          <span class="user-name">Mi cuenta</span>
+          <span class="user-role">Usuario</span>
+        </div>
+        <button
+            type="button"
+            class="logout-button"
+            (click)="cerrarSesion()">
+            Cerrar sesión
+        </button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>
