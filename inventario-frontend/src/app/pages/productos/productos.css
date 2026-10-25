@@ -1,11 +1,4 @@
 
-:host {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  color: #202b3c;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -202,26 +195,6 @@ tbody tr:last-child td {
   color: #3867f4;
 }
 
-.product-purple {
-  background: #f0eaff;
-  color: #8963df;
-}
-
-.product-orange {
-  background: #fff0df;
-  color: #e58a27;
-}
-
-.product-green {
-  background: #e3f8ee;
-  color: #1caa75;
-}
-
-.product-pink {
-  background: #ffebf1;
-  color: #d75d89;
-}
-
 .product-cell strong,
 .product-cell span {
   display: block;
@@ -303,6 +276,10 @@ tbody tr:last-child td {
   color: #758197;
   cursor: pointer;
   font-size: 16px;
+
+  & svg {
+    width: 16px;
+  }
 }
 
 .icon-button:hover {

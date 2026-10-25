@@ -1,8 +1,4 @@
 
-:host {
-    display: block;
-}
-
 .ventas-page {
     display: flex;
     flex-direction: column;
@@ -41,6 +37,10 @@ h2,
 h3,
 p {
     margin-top: 0;
+}
+
+h2 {
+    font-size: 17px;
 }
 
 .page-header h1 {
@@ -83,11 +83,10 @@ input {
     width: 100%;
     min-height: 42px;
     padding: 10px 12px;
-    color: inherit;
     background: #fff;
-    border: 1px solid #d1d5db;
     border-radius: 6px;
-    font: inherit;
+    border: 1px solid #ececec;
+    color: #344055;
 }
 
 select:focus,
@@ -116,18 +115,47 @@ input:focus {
     opacity: 0.5;
 }
 
-.btn-primary {
-    color: #fff;
-    background: #2563eb;
+.primary-button,
+.secondary-button,
+.danger-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  transition: transform 0.15s, background 0.15s;
 }
 
-.btn-primary:hover:not(:disabled) {
-    background: #1d4ed8;
+.primary-button {
+  background: #3867f4;
+  color: #fff;
 }
 
-.btn-secondary {
-    color: #374151;
-    background: #f3f4f6;
+.primary-button:hover {
+  background: #2854da;
+  transform: translateY(-1px);
+}
+
+.primary-button span {
+  font-size: 18px;
+}
+
+.secondary-button:hover,
+.danger-button:hover {
+    transform: translateY(-1px);
+}
+
+.secondary-button {
+  border: 1px solid #e0e6ef;
+  background: #fff;
+  color: #667287;
 }
 
 .btn-danger {
@@ -135,7 +163,13 @@ input:focus {
     background: #fee2e2;
 }
 
+.danger-button{
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
 .empty-state {
+    margin-top: 1rem;
     padding: 40px 16px;
     text-align: center;
     color: #6b7280;
@@ -150,6 +184,7 @@ input:focus {
 .table-container {
     overflow-x: auto;
     padding-bottom: 2rem;
+    margin-top: 1rem;
 }
 
 table {
@@ -163,6 +198,12 @@ td {
     padding: 14px 12px;
     border-bottom: 1px solid #e5e7eb;
     white-space: nowrap;
+}
+
+.table-container td {
+    font-size: 0.8rem;
+    padding: 0.5rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 th {
@@ -245,12 +286,7 @@ th {
     cursor: pointer;
     background: none;
     border: none;
-    height: 30px;
-
-    &:hover {
-        background-color: #e1e1e1;
-        border-radius: 50%;
-    }
+    height: 30px
 }
 
 .panel-header {
