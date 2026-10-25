@@ -116,7 +116,7 @@
 
                 <button
                 type="button"
-                class="btn btn-primary"
+                class="primary-button"
                 (click)="agregarProducto()"
                 >
                     Agregar
@@ -142,7 +142,7 @@
 
             <button
                 type="button"
-                class="btn btn-secondary"
+                class="secondary-button"
                 [disabled]="productosVenta.length === 0 || registrandoVenta"
                 (click)="limpiarVenta()"
             >
@@ -200,7 +200,7 @@
                             <td>
                             <button
                                 type="button"
-                                class="btn btn-danger"
+                                class="danger-button"
                                 [disabled]="registrandoVenta"
                                 (click)="eliminarProducto(item.productoId)"
                             >
@@ -233,7 +233,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary btn-registrar"
+                    class="btn primary-button btn-registrar"
                     [disabled]="registrandoVenta"
                     (click)="registrarVenta()"
                     >

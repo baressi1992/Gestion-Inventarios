@@ -2,13 +2,14 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Producto, ProductoService } from '../../services/producto.service';
+import { LucidePencil, LucideX } from '@lucide/angular';
 
 type Categoria = Producto['categoria'];
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe],
+  imports: [CommonModule, CurrencyPipe, LucidePencil, LucideX],
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })

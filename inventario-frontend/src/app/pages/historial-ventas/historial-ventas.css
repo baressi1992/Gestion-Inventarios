@@ -1,8 +1,3 @@
-:host {
-    display: block;
-    color: #1e293b;
-}
-
 .historial-ventas {
     display: flex;
     flex-direction: column;
@@ -28,30 +23,12 @@
   font-size: 13px;
 }
 
-.resumen-ventas {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-}
 
-.resumen-card,
 .tabla-contenedor {
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 1.25rem;
-}
-
-.resumen-card span {
-  display: block;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.resumen-card strong {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 1.5rem;
 }
 
 .tabla-contenedor {
@@ -66,8 +43,8 @@
     white-space: nowrap;
 }
 
-.tabla-ventas th,
-.tabla-ventas td {
+.tabla-ventas th {
+    background-color: #f9fafb;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid #e2e8f0;
 }
@@ -78,6 +55,12 @@
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
+}
+
+.tabla-ventas td {
+    font-size: 0.8rem;
+    padding: 0.5rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .tabla-ventas tbody tr:hover {
@@ -156,10 +139,15 @@
     color: #b91c1c;
 }
 
-@media (max-width: 700px) {
-    .resumen-ventas {
-        grid-template-columns: 1fr;
+.modal-detalle-venta {
+    border: none;
+
+    &::backdrop {
+        background-color: rgba(52, 52, 52, 0.56);
     }
+}
+
+@media (max-width: 700px) {
 
     .historial-header {
         align-items: flex-start;
