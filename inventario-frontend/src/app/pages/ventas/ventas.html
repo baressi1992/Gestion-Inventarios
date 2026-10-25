@@ -1,238 +1,245 @@
 
 <section class="ventas-page">
-  <header class="page-header">
-    <div>
-      <h1>Registrar venta</h1>
-      <p>Selecciona productos y prepara el detalle de la venta.</p>
-    </div>
-  </header>
+    <header class="page-header">
+        <div class="breadcrumb">INICIO / REGISTRAR VENTA</div>
+        <h1>Registrar venta</h1>
+        <p class="subtitle">Selecciona productos y prepara el detalle de la venta.</p>
+    </header>
 
-  @if (mensajeExito) {
-    <div class="mensaje exito" role="status">
-      {{ mensajeExito }}
-    </div>
-  }
-
-  @if (error) {
-    <div class="mensaje error" role="alert">
-      {{ error }}
-    </div>
-  }
-  
-  @if (ventaRegistrada; as venta) {
-    <section class="panel venta-confirmada">
-      <h2>Venta registrada correctamente</h2>
-
-      <p>
-        Número de venta:
-        <strong>#{{ venta.id }}</strong>
-      </p>
-
-      <p>
-        Fecha:
-        <strong>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</strong>
-      </p>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Precio unitario</th>
-              <th>Cantidad</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (detalle of venta.detalles; track detalle.id) {
-              <tr>
-                <td>{{ detalle.nombreProducto }}</td>
-                <td>
-                  {{ detalle.precioUnitario | currency:'PEN':'S/ ':'1.2-2' }}
-                </td>
-                <td>{{ detalle.cantidad }}</td>
-                <td>
-                  {{ detalle.subtotal | currency:'PEN':'S/ ':'1.2-2' }}
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <p class="total">
-        Total registrado:
-        <strong>
-          {{ venta.total | currency:'PEN':'S/ ':'1.2-2' }}
-        </strong>
-      </p>
-    </section>
-  }
-
-  <!-- Selección de productos -->
-  <section class="panel selector-panel">
-    <h2>Agregar productos</h2>
-
-    @if (productos.length === 0) {
-      <p>No hay productos disponibles en el catálogo.</p>
-    } @else {
-      <div class="selector-grid">
-        <label>
-          Producto
-          <select [(ngModel)]="productoSeleccionadoId">
-            <option [ngValue]="null">Selecciona un producto</option>
-
-            @for (producto of productos; track producto.id) {
-              <option
-                [ngValue]="producto.id"
-                [disabled]="producto.cantidad <= 0"
-              >
-                {{ producto.nombre }} —
-                {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
-                (Stock: {{ producto.cantidad }})
-              </option>
-            }
-          </select>
-        </label>
-
-        <label>
-          Cantidad
-          <input
-            type="number"
-            min="1"
-            step="1"
-            [max]="productoSeleccionado?.cantidad ?? 1"
-            [(ngModel)]="cantidadSeleccionada"
-          />
-        </label>
-
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="agregarProducto()"
-        >
-          Agregar
-        </button>
-      </div>
-
-      @if (productoSeleccionado; as producto) {
-        <p class="stock-info">
-          Precio unitario:
-          <strong>
-            {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
-          </strong>
-          · Stock disponible: {{ producto.cantidad }}
-        </p>
-      }
+    @if (mensajeExito) {
+        <div class="mensaje exito" role="status">
+        {{ mensajeExito }}
+        </div>
     }
-  </section>
+
+    @if (error) {
+        <div class="mensaje error" role="alert">
+        {{ error }}
+        </div>
+    }
+
+    @if (ventaRegistrada; as venta) {
+        <section class="panel venta-confirmada">
+            <div class="panel-header">
+                <h2>Venta registrada correctamente</h2>
+                <button
+                    type="button"
+                    class="btn-cerrar"
+                    aria-label="Cerrar detalle de venta"
+                    (click)="ventaRegistrada = null"
+                    >
+                    <svg lucideX></svg>
+                </button>
+            </div>
+            <p>
+                Número de venta:
+                <strong>#{{ venta.id }}</strong>
+            </p>
+
+            <p>
+                Fecha:
+                <strong>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</strong>
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                        <th>Producto</th>
+                        <th>Precio unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (detalle of venta.detalles; track detalle.id) {
+                        <tr>
+                            <td>{{ detalle.nombreProducto }}</td>
+                            <td>
+                            {{ detalle.precioUnitario | currency:'PEN':'S/ ':'1.2-2' }}
+                            </td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>
+                            {{ detalle.subtotal | currency:'PEN':'S/ ':'1.2-2' }}
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="total">
+                Total registrado:
+                <strong>
+                {{ venta.total | currency:'PEN':'S/ ':'1.2-2' }}
+                </strong>
+            </p>
+        </section>
+    }
+
+    <section class="panel selector-panel">
+        <h2>Agregar productos</h2>
+
+        @if (productos.length === 0) {
+            <p>No hay productos disponibles en el catálogo.</p>
+        } @else {
+            <div class="selector-grid">
+                <label>
+                    Producto
+                    <select [(ngModel)]="productoSeleccionadoId">
+                        <option [ngValue]="null">Selecciona un producto</option>
+
+                        @for (producto of productos; track producto.id) {
+                            <option
+                                [ngValue]="producto.id"
+                                [disabled]="producto.cantidad <= 0"
+                            >
+                                {{ producto.nombre }} —
+                                {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
+                                (Stock: {{ producto.cantidad }})
+                            </option>
+                        }
+                    </select>
+                </label>
+
+                <label>
+                    Cantidad
+                    <input
+                        type="number"
+                        min="1"
+                        step="1"
+                        [max]="productoSeleccionado?.cantidad ?? 1"
+                        [(ngModel)]="cantidadSeleccionada"
+                    />
+                </label>
+
+                <button
+                type="button"
+                class="btn btn-primary"
+                (click)="agregarProducto()"
+                >
+                    Agregar
+                </button>
+            </div>
+
+            @if (productoSeleccionado; as producto) {
+                <p class="stock-info">
+                    Precio unitario:
+                    <strong>
+                        {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
+                    </strong>
+                    · Stock disponible: {{ producto.cantidad }}
+                </p>
+            }
+        }
+    </section>
 
   <!-- Detalle del carrito -->
-  <section class="panel detalle-panel">
-    <div class="section-header">
-      <h2>Detalle de la venta</h2>
+    <section class="panel detalle-panel">
+        <div class="section-header">
+            <h2>Detalle de la venta</h2>
 
-      <button
-        type="button"
-        class="btn btn-secondary"
-        [disabled]="productosVenta.length === 0 || registrandoVenta"
-        (click)="limpiarVenta()"
-      >
-        Limpiar venta
-      </button>
-    </div>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                [disabled]="productosVenta.length === 0 || registrandoVenta"
+                (click)="limpiarVenta()"
+            >
+                Limpiar venta
+            </button>
+        </div>
 
-    @if (productosVenta.length === 0) {
-      <div class="empty-state">
-        <h3>Tu venta está vacía</h3>
-        <p>Agrega uno o más productos para comenzar.</p>
-      </div>
-    } @else {
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Precio unitario</th>
-              <th>Cantidad</th>
-              <th>Subtotal</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+        @if (productosVenta.length === 0) {
+            <div class="empty-state">
+                <h3>Tu venta está vacía</h3>
+                <p>Agrega uno o más productos para comenzar.</p>
+            </div>
+        } @else {
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                        <th>Producto</th>
+                        <th>Precio unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                        </tr>
+                    </thead>
 
-          <tbody>
-            @for (item of productosVenta; track item.productoId) {
-              <tr>
-                <td>{{ item.nombreProducto }}</td>
+                    <tbody>
+                        @for (item of productosVenta; track item.productoId) {
+                        <tr>
+                            <td>{{ item.nombreProducto }}</td>
 
-                <td>
-                  {{ item.precioUnitario | currency:'PEN':'S/ ':'1.2-2' }}
-                </td>
+                            <td>
+                            {{ item.precioUnitario | currency:'PEN':'S/ ':'1.2-2' }}
+                            </td>
 
-                <td>
-                  <input
-                    class="cantidad-input"
-                    type="number"
-                    min="1"
-                    step="1"
-                    [ngModel]="item.cantidad"
-                    (ngModelChange)="actualizarCantidad(item.productoId, $event)"
-                    [disabled]="registrandoVenta"
-                    [attr.aria-label]="'Cantidad de ' + item.nombreProducto"
-                  />
-                </td>
+                            <td>
+                            <input
+                                class="cantidad-input"
+                                type="number"
+                                min="1"
+                                step="1"
+                                [ngModel]="item.cantidad"
+                                (ngModelChange)="actualizarCantidad(item.productoId, $event)"
+                                [disabled]="registrandoVenta"
+                                [attr.aria-label]="'Cantidad de ' + item.nombreProducto"
+                            />
+                            </td>
 
-                <td>
-                  {{
-                    item.cantidad * item.precioUnitario
-                      | currency:'PEN':'S/ ':'1.2-2'
-                  }}
-                </td>
+                            <td>
+                            {{
+                                item.cantidad * item.precioUnitario
+                                | currency:'PEN':'S/ ':'1.2-2'
+                            }}
+                            </td>
 
-                <td>
-                  <button
+                            <td>
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                [disabled]="registrandoVenta"
+                                (click)="eliminarProducto(item.productoId)"
+                            >
+                                Eliminar
+                            </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="resumen">
+                <p>
+                    Productos diferentes:
+                    <strong>{{ productosVenta.length }}</strong>
+                </p>
+
+                <p>
+                    Unidades:
+                    <strong>{{ totalUnidades }}</strong>
+                </p>
+
+                <p class="total">
+                    Total:
+                    <strong>
+                        {{ totalVenta | currency:'PEN':'S/ ':'1.2-2' }}
+                    </strong>
+                </p>
+
+                <button
                     type="button"
-                    class="btn btn-danger"
+                    class="btn btn-primary btn-registrar"
                     [disabled]="registrandoVenta"
-                    (click)="eliminarProducto(item.productoId)"
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <div class="resumen">
-        <p>
-          Productos diferentes:
-          <strong>{{ productosVenta.length }}</strong>
-        </p>
-
-        <p>
-          Unidades:
-          <strong>{{ totalUnidades }}</strong>
-        </p>
-
-        <p class="total">
-          Total:
-          <strong>
-            {{ totalVenta | currency:'PEN':'S/ ':'1.2-2' }}
-          </strong>
-        </p>
-
-        <button
-          type="button"
-          class="btn btn-primary btn-registrar"
-          [disabled]="registrandoVenta"
-          (click)="registrarVenta()"
-        >
-          {{ registrandoVenta ? 'Registrando...' : 'Registrar venta' }}
-        </button>
-      </div>
-    }
-  </section>
+                    (click)="registrarVenta()"
+                    >
+                    {{ registrandoVenta ? 'Registrando...' : 'Registrar venta' }}
+                </button>
+            </div>
+        }
+    </section>
 </section>

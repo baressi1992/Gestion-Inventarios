@@ -25,22 +25,28 @@
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             (click)="menuAbierto = false">
-            <span class="nav-icon">▦</span>
+            <svg lucideChartNoAxesColumn></svg>
             <span>Dashboard</span>
         </a>
         <a
             routerLink="/productos"
             routerLinkActive="active"
             (click)="menuAbierto = false">
-            <span class="nav-icon">□</span>
+            <svg lucidePackagePlus></svg>
             Productos
         </a>
         <a
             routerLink="/ventas"
             routerLinkActive="active"
             (click)="menuAbierto = false">
-            <span class="nav-icon">□</span>
+            <svg lucideBadgeDollarSign></svg>
             Ventas
+        </a>
+        <a 
+            routerLink="/historial-ventas" 
+            routerLinkActive="active">
+            <svg lucideSummary></svg>
+            Historial de ventas
         </a>
     </nav>
 

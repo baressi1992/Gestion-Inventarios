@@ -1,1 +1,156 @@
-<p>historial-ventas works!</p>
+<div class="historial-ventas">
+    <header class="historial-header">
+        <div class="breadcrumb">INICIO / HISTORIAL DE VENTAS</div>
+        <h1>Historial de ventas</h1>
+        <p class="subtitle">Consulta y revisa las ventas registradas</p>
+    </header>
+
+    @if (cargando) {
+        <div class="estado-vacio">
+            Cargando ventas...
+        </div>
+    }
+
+    @if (error) {
+        <div class="estado-error">
+            {{ error }}
+        </div>
+    }
+
+    @if (!cargando && !error && ventas.length === 0) {
+        <div class="estado-vacio">
+            <p>No hay ventas registradas todavía.</p>
+        </div>
+    }
+
+    @if (ventas.length > 0) {
+        <div class="tabla-contenedor">
+            <table class="tabla-ventas">
+                <thead>
+                    <tr>
+                    <th>N.º</th>
+                    <th>Fecha</th>
+                    <th>Productos</th>
+                    <th>Unidades</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (venta of ventas; track venta.id) {
+                    <tr>
+                        <td>#{{ venta.id }}</td>
+                        <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ venta.detalles.length }}</td>
+                        <td>
+                            {{ obtenerTotalUnidades(venta) }}
+                        </td>
+                        <td>
+                            {{ venta.total | currency:'PEN':'symbol':'1.2-2' }}
+                        </td>
+                        <td>
+                            <button
+                                type="button"
+                                class="btn-detalle"
+                                (click)="verDetalle(venta)"
+                            >
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="paginacion">
+            <span class="paginacion-info">
+                {{ totalVentas }} ventas registradas
+            </span>
+
+            <div class="paginacion-controles">
+            <button
+                type="button"
+                class="btn-pagina"
+                [disabled]="paginaActual === 0 || cargando"
+                (click)="irPaginaAnterior()"
+            >
+                Anterior
+            </button>
+
+            <span class="pagina-actual">
+                Página {{ totalPaginas === 0 ? 0 : paginaActual + 1 }}
+                de {{ totalPaginas }}
+            </span>
+
+            <button
+                type="button"
+                class="btn-pagina"
+                [disabled]="paginaActual + 1 >= totalPaginas || cargando"
+                (click)="irPaginaSiguiente()"
+            >
+                Siguiente
+            </button>
+            </div>
+        </div>
+    }
+
+    @if (ventaSeleccionada; as venta) {
+        <dialog #dialogDetalle class="modal-detalle-venta">
+            <section class="detalle-venta">
+                <div class="detalle-venta-header">
+                    <div>
+                        <h2>Detalle de la venta #{{ venta.id }}</h2>
+                        <p>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-pagina"
+                        aria-label="Cerrar detalle de venta"
+                        (click)="cerrarDetalle()"
+                    >
+                        <svg lucideX></svg>
+                        Cerrar
+                    </button>
+                </div>
+
+                <div class="tabla-contenedor">
+                    <table class="tabla-ventas">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio unitario</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (detalle of venta.detalles; track detalle.id) {
+                                <tr>
+                                    <td>{{ detalle.nombreProducto }}</td>
+                                    <td>
+                                        {{ detalle.precioUnitario | currency:'PEN':'symbol':'1.2-2' }}
+                                    </td>
+                                    <td>{{ detalle.cantidad }}</td>
+                                    <td>
+                                        {{ detalle.subtotal | currency:'PEN':'symbol':'1.2-2' }}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="detalle-venta-total">
+                    <span>Total de la venta</span>
+                    <strong>
+                        {{ venta.total | currency:'PEN':'symbol':'1.2-2' }}
+                    </strong>
+                </div>
+            </section>
+        </dialog>
+    }
+</div>

@@ -26,19 +26,33 @@ export interface VentaResponse {
   detalles: DetalleVentaResponse[];
 }
 
+export interface PaginaVentas {
+  content: VentaResponse[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+  first: boolean;
+  last: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class VentaService {
-  private readonly apiUrl = 'http://localhost:8080/api/ventas';
+    private readonly apiUrl = 'http://localhost:8080/api/ventas';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
+        registrarVenta(venta: VentaRequest): Observable<VentaResponse> {
+            return this.http.post<VentaResponse>(this.apiUrl, venta);
+    }
 
-  registrarVenta(venta: VentaRequest): Observable<VentaResponse> {
-    return this.http.post<VentaResponse>(this.apiUrl, venta);
-  }
-
-  obtenerVentas(): Observable<VentaResponse[]> {
-    return this.http.get<VentaResponse[]>(this.apiUrl);
-  }
+    obtenerVentas(
+        pagina = 0,
+        tamanio = 10,
+        ): Observable<PaginaVentas> {
+        return this.http.get<PaginaVentas>(
+            `${this.apiUrl}?page=${pagina}&size=${tamanio}&sort=fecha,desc`,
+        );
+    }
 }
