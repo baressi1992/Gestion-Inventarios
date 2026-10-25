@@ -31,9 +31,16 @@
         <a
             routerLink="/productos"
             routerLinkActive="active"
-            (click)="alternarMenu()">
+            (click)="menuAbierto = false">
             <span class="nav-icon">□</span>
             Productos
+        </a>
+        <a
+            routerLink="/ventas"
+            routerLinkActive="active"
+            (click)="menuAbierto = false">
+            <span class="nav-icon">□</span>
+            Ventas
         </a>
     </nav>
 
