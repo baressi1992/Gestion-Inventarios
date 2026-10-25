@@ -85,23 +85,48 @@
             <p>No hay productos disponibles en el catálogo.</p>
         } @else {
             <div class="selector-grid">
-                <label>
-                    Producto
-                    <select [(ngModel)]="productoSeleccionadoId">
-                        <option [ngValue]="null">Selecciona un producto</option>
+              <label class="buscador-productos">
+                Buscar producto
+                <input
+                  type="text"
+                  [(ngModel)]="busquedaProducto"
+                  placeholder="Escribe el nombre del producto..."
+                  autocomplete="off"
+                  aria-label="Buscar producto por nombre"
+                />
 
-                        @for (producto of productos; track producto.id) {
-                            <option
-                                [ngValue]="producto.id"
-                                [disabled]="producto.cantidad <= 0"
-                            >
-                                {{ producto.nombre }} —
+                @if (busquedaProducto.trim().length > 0) {
+                <div class="resultados-productos">
+                  @if (productosFiltrados.length === 0) {
+                  <p class="sin-resultados">
+                    No se encontraron productos.
+                  </p>
+                  } @else {
+                  @for (producto of productosFiltrados; track producto.id) {
+                  <button
+                    type="button"
+                    class="resultado-producto"
+                    [class.seleccionado]="productoSeleccionadoId === producto.id"
+                    [disabled]="producto.cantidad <= 0"
+                    (click)="seleccionarProducto(producto)"
+                  >
+                        <span class="resultado-info">
+                            <strong>{{ producto.nombre }}</strong>
+                            <small>
                                 {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
-                                (Stock: {{ producto.cantidad }})
-                            </option>
-                        }
-                    </select>
-                </label>
+                                · Stock: {{ producto.cantidad }}
+                            </small>
+                        </span>
+
+                    <span class="resultado-accion">
+                            {{ producto.cantidad <= 0 ? 'Agotado' : 'Seleccionar' }}
+                        </span>
+                  </button>
+                  }
+                  }
+                </div>
+                }
+              </label>
 
                 <label>
                     Cantidad
