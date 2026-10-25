@@ -3,32 +3,29 @@ package com.inventario.salesservice.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "ventas")
+@Table(name = "ventas_cabecera")
 public class Venta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "producto_id", nullable = false)
-    private Long productoId;
-
-    @Column(name = "nombre_producto", nullable = false, length = 150)
-    private String nombreProducto;
-
-    @Column(nullable = false)
-    private Integer cantidad;
-
-    @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
-    private BigDecimal precioUnitario;
-
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal total;
 
     @Column(nullable = false)
     private LocalDateTime fecha;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "venta_id", nullable = false)
+    private List<DetalleVenta> detalles = new ArrayList<>();
 
     public Venta() {
     }
@@ -38,9 +35,29 @@ public class Venta {
         if (fecha == null) {
             fecha = LocalDateTime.now();
         }
-        if (cantidad != null && precioUnitario != null) {
-            total = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+        calcularTotal();
+    }
+
+    @PreUpdate
+    public void antesDeActualizar() {
+        calcularTotal();
+    }
+
+    public void calcularTotal() {
+        total = BigDecimal.ZERO;
+
+        if (detalles != null) {
+            for (DetalleVenta detalle : detalles) {
+                if (detalle.getSubtotal() != null) {
+                    total = total.add(detalle.getSubtotal());
+                }
+            }
         }
+    }
+
+    public void agregarDetalle(DetalleVenta detalle) {
+        detalles.add(detalle);
+        calcularTotal();
     }
 
     public Long getId() {
@@ -49,38 +66,6 @@ public class Venta {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getProductoId() {
-        return productoId;
-    }
-
-    public void setProductoId(Long productoId) {
-        this.productoId = productoId;
-    }
-
-    public String getNombreProducto() {
-        return nombreProducto;
-    }
-
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
     }
 
     public BigDecimal getTotal() {
@@ -97,5 +82,14 @@ public class Venta {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+
+    public List<DetalleVenta> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleVenta> detalles) {
+        this.detalles = detalles;
+        calcularTotal();
     }
 }
