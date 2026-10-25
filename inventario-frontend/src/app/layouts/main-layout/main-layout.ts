@@ -1,11 +1,12 @@
 
 import { Component } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { LucidePackagePlus, LucideChartNoAxesColumn, LucideBadgeDollarSign, LucideSummary } from '@lucide/angular';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, LucidePackagePlus, LucideChartNoAxesColumn, LucideBadgeDollarSign, LucideSummary],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })
